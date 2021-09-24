@@ -29,6 +29,23 @@ let db = new sqlite3.Database(DBSOURCE, (err) => {
         });  
     }
 });
-
+db.run(`CREATE TABLE messages (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name text, 
+    message text,
+    password text
+    )`,
+(err) => {
+    if (err) {
+       // Table already created
+    }else{
+        console.log('Tables created')
+        // Table just created, creating some rows
+        var insert = 'INSERT INTO messages (name, message, password) VALUES (?,?,?)'
+        db.run(insert, ["admin","Fly you Fools!","admin123456"])
+        db.run(insert, ["user","Potatoes, Boil'em, mashe'em, stick'em in a stew",md5("user123456")])
+        console.log('Tables created 2')
+        }
+    }); 
 
 module.exports = db

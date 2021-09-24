@@ -1,1 +1,19 @@
-<h1>Hello User</h1>
+<h1>Welcome Hobbit'ses</h1>
+<body>
+    <p>This page is only available to logged in Hobbit'ses</p>
+    <img src="/images/sorryaaron.jpg">
+    <hidden><a><img style="display: none;" src="http://www.doughall.us/family/aaron/gallery/IMG_4230.JPG"></a></hidden>
+
+    <h2>View your Profile Info Here{{{user}}}</h2>
+
+        <form action="/profile" method="POST">
+            <label for="uName">Enter your Username:</label><br>
+            <input type="text" id="uName" name="uName"><br><br>
+            <input type="submit" value="Submit">
+        </form> 
+    {{#each dataU}}
+        <div class="row">Email Address: {{this.email}}</div>
+        <div class="row">Username: {{this.name}}</div>
+        <div class="row">Password: {{this.password}}</div>
+    {{/each}}
+</body>

@@ -3,7 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var db = require("./database.js")
+/* var db = require("./database.js") */
 
 const exphbs = require('express-handlebars');
 const handlebars = require('./util/handlebars')(exphbs);
@@ -12,8 +12,6 @@ const session = require('express-session');
 var indexRouter = require('./routes/index');
 
 var app = express();
-
-// Insert here other API endpoints
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -27,7 +25,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(session({ secret: 'keyboard cat', cookie: { maxAge: 60000 }}))
+app.use(session({ secret: 'OneRingToRuleThemAllOneRingToFindThemOneRingToBringThemAllAndInTheDarknessBindThem', cookie: { maxAge: 60000 }}))
 app.use('/', indexRouter);
 
 // catch 404 and forward to error handler

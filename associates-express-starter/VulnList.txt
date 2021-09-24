@@ -1,0 +1,53 @@
+--- Known Vulnerability list ---
+
+Just a few intentional vulns, im sure there are more.
+
+--- Cross Site Scripting (XSS) ---
+	
+	1. At the affected URL "http://localhost:3000/messages" the "message" parameter is used to store a message in the database and return the message to the client. This parameter does not perform any input validation or encode the user input.
+
+		- Remediation suggestion: Use a regular expression to filter the user input for potentially harmful characters, reformat the handlebars expression that handles the way the "message" parameters data is displayed to the client, so that html entities are escaped.
+
+	2. At the affected URL "http://localhost:3000/" that applications source code references a query parameter "name" which is never used and is susceptable to XSS.
+
+		- Remediation suggestion: Reformat the handlebars expression that handles the way the "name" parameters data is displayed to the client, so that html entities are escaped. Remove the unused parameter.
+
+	3. At the affected URL "http://localhost:3000/login" that applications source code references a query parameter "name" which is never used and is susceptable to XSS.
+
+		- Remediation suggestion: Reformat the handlebars expression that handles the way the "name" parameters data is displayed to the client, so that html entities are escaped. Remove the unused parameter.
+
+--- Structured Query Language Injection (SQLi) ---
+	
+	1. At the affected URL "http://localhost:3000/login" the login procedures can be bypassed using SQLi payloads like, this.... ") or ("x")=("x ....or like this.... ") or true-- .... This works in either the "uName" or "passWD" parameter.
+
+		- Remediation suggestion: parameterize the query performing the retreival of credential information during the account validation procedures.
+
+	2. At the affected URL "http://localhost:3000/profile" the retireval of user account information can be injected with an SQLi payload to retrieve a list of all the user accounts. Injection payloads would be like, this... ") or ("x")=("x ....or like this... admin") or "1"="1"--
+
+--- Missing Function Level Access Controls (MFLAC) ---
+
+	1. The administrative page at the affected URL "http://localhost:3000/SauronsAdminPage" is left exposed to the public and requires no authentication to access. This leaves what should be considered administrative functionality exposed without any prior authorization.
+
+		- Remediation suggestion: require admin authentication before allowing access to the page.
+
+--- Insecure Direct Object Reference (IDOR) ---
+		
+	1. At the affected URL "http://localhost:3000/profile" the "uName" parameter is used to retreive sensative user profile information, the username entered into the "uName" parameter does not perform proper authroization checks and allows for the retrieveval of user account data not attached to the authenticated session.
+			
+		- Remediation suggestion: Use a conditional expression to verify the user account data retrieved by the "uName" parameter belongs to the authenticated session. 
+
+--- Cross Site Request Forgery (CSRF) ---
+	
+	1. The application does not utilize any CSRF tokens, or CSRF defences via the same origin policy or referrer header. As such any request performing a desireable function can be exploited via CSRF. Affected URLs, "http://localhost:3000/profile", "http://localhost:3000/register", "http://localhost:3000/messages", "http://localhost:3000/SauronsAdminPage"
+
+		- Remediation suggestion: Implement the usage of radomized CSRF tokens when sending requests. Or configure the application to validate the requests using the same origin policy header or referrer header.
+
+--- Cookie Issues ---
+
+	1. The application sets a session id cookie upon authentication but does not set any flags such as HTTPOnly, and Secure. This cookie value remains consisted reguardless of the authenticated user. 
+
+		- Remediation suggestion: To implement the usage of Secure and HTTPOnly cookies the application needs to implement SSL/TLS and then set those flags upon cookie creation. Not likely given the nature of the application but worth mentioning.
+
+	2. The application does not implement proper session destruction procedures. The session id value set upon authentication remains persistent after logging out of the applciation.
+
+		- Remediation suggestion: The application uses "req.session.destroy" within the submission of the request to log out of the application. However as the session id persists after log out this function needs to be implemented in a different manner.

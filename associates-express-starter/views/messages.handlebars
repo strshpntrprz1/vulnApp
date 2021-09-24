@@ -1,0 +1,18 @@
+<h1>Commune with the Fellowship</h1>
+<body>
+<form action="/messages" method="POST">
+    <label for="uName">Tell me your name Horse Rider:</label><br>
+    <input type="text" id="uName" name="uName"><br>
+
+    <label for="passWD">Password:</label><br>
+    <input type="text" id="passWD" name="passWD"><br>
+
+    <label for="message">Message:</label><br>
+    <input type="text" id="message" name="message"><br><br>
+
+    <input type="submit" value="Submit">
+</form>
+{{#each dataM}}
+<div class="row">{{{this.message}}}</div>
+{{/each}}
+</body>
